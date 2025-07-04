@@ -1,6 +1,7 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer'; // ⬅️ Import here
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,9 +20,7 @@ export default function RootLayout({
       <body className={`${inter.className} h-full flex flex-col bg-gray-50 text-gray-900`}>
         <Navbar />
         <main className="flex-grow">{children}</main>
-        <footer className="bg-blue-900 text-white text-sm text-center p-4">
-          &copy; {new Date().getFullYear()} MASSU. All Rights Reserved.
-        </footer>
+        <Footer /> {/* ⬅️ Replaces the simple inline footer */}
       </body>
     </html>
   );

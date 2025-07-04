@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { SiGmail } from 'react-icons/si';
-
 import {
   FaUser,
   FaEnvelope,
@@ -19,7 +18,7 @@ export default function ContactPage() {
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -44,7 +43,8 @@ export default function ContactPage() {
     setStatus('submitting');
 
     try {
-      await new Promise((res) => setTimeout(res, 1500)); // simulate API call
+      // Simulate API call delay
+      await new Promise(res => setTimeout(res, 1500));
       setStatus('success');
       setForm({ name: '', email: '', message: '' });
     } catch {
@@ -76,10 +76,7 @@ export default function ContactPage() {
         style={{ backgroundImage: "url('/images/abouts-staff.jpg')" }}
       >
         {/* Blue overlay with blur */}
-        <div
-          className="absolute inset-0 bg-blue-900/30 backdrop-blur-sm"
-          aria-hidden="true"
-        />
+        <div className="absolute inset-0 bg-blue-900/30 backdrop-blur-sm" aria-hidden="true" />
 
         <div className="relative max-w-6xl mx-auto p-8 space-y-10 text-gray-900">
           <h1 className="text-4xl font-extrabold text-blue-800 drop-shadow-sm">Contact Us</h1>
@@ -144,7 +141,7 @@ export default function ContactPage() {
               <h2 className="text-blue-800 text-2xl font-semibold mb-6 flex items-center gap-3">
                 <FaCommentDots className="text-yellow-400" /> Send a Message
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-6 text-gray-900">
+              <form onSubmit={handleSubmit} className="space-y-6 text-gray-900" noValidate>
                 {/* Name Field */}
                 <div className="relative flex items-center">
                   <FaUser className="absolute left-3 text-gray-400 text-lg" />
