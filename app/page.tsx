@@ -1,9 +1,10 @@
 'use client';
 
-import { FaHandsHelping, FaChalkboardTeacher, FaLaptopCode } from 'react-icons/fa';
+import { FaHandsHelping, FaChalkboardTeacher, FaLaptopCode, FaUsers } from 'react-icons/fa';
 import Link from 'next/link';
 import TestimonialCarousel from './components/TestimonialCarousel';
 import Partners from "./components/Partners";
+
 
 
 export default function HomePage() {
@@ -97,6 +98,73 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      //.............................
+      {/* Events Section */}
+{/* Events Section */}
+<section className="bg-gray-50 py-20 px-6">
+  <div className="max-w-6xl mx-auto text-center">
+    <h2 className="text-4xl font-bold text-blue-900 mb-4">Upcoming Events</h2>
+    <p className="text-gray-600 text-lg mb-12 max-w-3xl mx-auto">
+      Discover inspiring events organized by MASSU to support leadership, digital skills, and community engagement.
+    </p>
+
+    <div className="grid gap-8 md:grid-cols-3">
+      {/* Event 1 - Leadership */}
+      <div className="bg-white rounded-2xl shadow-lg p-6 border border-yellow-200 hover:shadow-xl transition duration-300">
+        <div className="flex items-center gap-3 mb-4 text-blue-800">
+          <FaUsers className="text-2xl text-yellow-500" />
+          <h3 className="text-xl font-semibold">Leadership Summit 2025</h3>
+        </div>
+        <p className="text-sm text-gray-500 mb-1">📅 July 15, 2025</p>
+        <p className="text-sm text-gray-500 mb-3">📍 Mzuzu University Auditorium</p>
+        <p className="text-gray-700 text-sm text-left">
+          A national platform for student leaders to build leadership, strategy, and advocacy skills.
+        </p>
+      </div>
+
+      {/* Event 2 - Tech */}
+      <div className="bg-white rounded-2xl shadow-lg p-6 border border-yellow-200 hover:shadow-xl transition duration-300">
+        <div className="flex items-center gap-3 mb-4 text-blue-800">
+          <FaLaptopCode className="text-2xl text-yellow-500" />
+          <h3 className="text-xl font-semibold">Digital Skills Bootcamp</h3>
+        </div>
+        <p className="text-sm text-gray-500 mb-1">📅 August 5–7, 2025</p>
+        <p className="text-sm text-gray-500 mb-3">📍 Chancellor College</p>
+        <p className="text-gray-700 text-sm text-left">
+          Learn coding, cybersecurity, and productivity tools in this 3-day interactive workshop.
+        </p>
+      </div>
+
+      {/* Event 3 - Outreach */}
+      <div className="bg-white rounded-2xl shadow-lg p-6 border border-yellow-200 hover:shadow-xl transition duration-300">
+        <div className="flex items-center gap-3 mb-4 text-blue-800">
+          <FaHandsHelping className="text-2xl text-yellow-500" />
+          <h3 className="text-xl font-semibold">Community Outreach Day</h3>
+        </div>
+        <p className="text-sm text-gray-500 mb-1">📅 September 2, 2025</p>
+        <p className="text-sm text-gray-500 mb-3">📍 Nkhata Bay Secondary School</p>
+        <p className="text-gray-700 text-sm text-left">
+          MASSU volunteers will mentor, donate learning materials, and deliver motivational talks.
+        </p>
+      </div>
+    </div>
+
+    {/* CTA */}
+    <div className="mt-12">
+      <Link
+        href="/events"
+        className="inline-block bg-blue-800 text-white font-semibold px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition"
+      >
+        View All Events
+      </Link>
+    </div>
+  </div>
+</section>
+
+
+
+
 
       <TestimonialCarousel />
       <Partners />
