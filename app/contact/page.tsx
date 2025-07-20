@@ -1,4 +1,5 @@
-'use client';
+// app/contact/page.tsx
+'use client'; // This directive is necessary for client-side interactivity in Next.js App Router
 
 import { useState } from 'react';
 import { SiGmail } from 'react-icons/si';
@@ -11,52 +12,107 @@ import {
   FaFacebook,
   FaTwitter,
 } from 'react-icons/fa';
+import FormField from '../components/FormField'; // Absolute import for cleaner paths
+import { isValidEmail } from '@/app/functions/validation'; // Import the validation function
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [errors, setErrors] = useState({ name: '', email: '', message: '' }); // State for field-specific errors
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [generalErrorMsg, setGeneralErrorMsg] = useState(''); // State for general form errors (e.g., API errors)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+    // Clear the specific field's error when the user starts typing in it
+    setErrors(prev => ({ ...prev, [name]: '' }));
+    // Clear any general validation error messages if the user starts correcting the form
+    if (generalErrorMsg === 'Please correct the errors in the form.' || generalErrorMsg === 'Please enter a valid email address.') {
+        setGeneralErrorMsg('');
+    }
   };
-
-  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('idle');
-    setErrorMsg('');
+    setStatus('idle'); // Reset status
+    setErrors({ name: '', email: '', message: '' }); // Clear all previous field errors
+    setGeneralErrorMsg(''); // Clear any previous general error messages
 
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-      setErrorMsg('Please fill in all fields.');
-      setStatus('error');
-      return;
+    let formIsValid = true;
+    const newErrors = { name: '', email: '', message: '' }; // Temporary object to collect errors
+
+    // Perform validation for each field
+    if (!form.name.trim()) {
+      newErrors.name = 'Name is required.';
+      formIsValid = false;
+    }
+    if (!form.email.trim()) {
+      newErrors.email = 'Email is required.';
+      formIsValid = false;
+    } else if (!isValidEmail(form.email)) {
+      newErrors.email = 'Please enter a valid email address.';
+      formIsValid = false;
+    }
+    if (!form.message.trim()) {
+      newErrors.message = 'Message is required.';
+      formIsValid = false;
     }
 
-    if (!isValidEmail(form.email)) {
-      setErrorMsg('Please enter a valid email address.');
-      setStatus('error');
-      return;
+    setErrors(newErrors); // Update the errors state to display messages
+
+    if (!formIsValid) {
+      setGeneralErrorMsg('Please correct the errors in the form.');
+      setStatus('error'); // Set status to error if form is not valid
+      return; // Stop submission if validation fails
     }
 
-    setStatus('submitting');
+    setStatus('submitting'); // Indicate that the form is being submitted
 
     try {
-      // Simulate API call delay
-      await new Promise(res => setTimeout(res, 1500));
-      setStatus('success');
-      setForm({ name: '', email: '', message: '' });
-    } catch {
-      setErrorMsg('Failed to send message. Please try again later.');
-      setStatus('error');
+      // --- START: Actual API Call ---
+      // IMPORTANT: Replace '/api/contact' with your actual backend endpoint URL
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any other headers your API might require, e.g., 'Authorization': 'Bearer YOUR_TOKEN'
+        },
+        body: JSON.stringify(form), // Send the form data as JSON
+      });
+
+      if (!response.ok) {
+        // If the server response is not in the 2xx range
+        let errorData;
+        try {
+          // Attempt to parse a specific error message from the response body
+          errorData = await response.json();
+        } catch (parseError) {
+          // Fallback if the response is not valid JSON
+          console.error("Failed to parse error response:", parseError);
+          errorData = { message: 'An unexpected error occurred on the server.' };
+        }
+        // Throw an error to be caught by the catch block below
+        throw new Error(errorData.message || 'Failed to send message.');
+      }
+
+      // If the response is successful (status 2xx)
+      // You can optionally read the success response data if your API returns any
+      // const successData = await response.json();
+      // console.log('Message sent successfully:', successData);
+
+      setStatus('success'); // Indicate successful submission
+      setForm({ name: '', email: '', message: '' }); // Clear the form fields
+    } catch (apiError: any) { // Catch any errors during the fetch operation
+      console.error("Submission error:", apiError); // Log the full error for debugging
+      setGeneralErrorMsg(apiError.message || 'Failed to send message. Please try again later.');
+      setStatus('error'); // Set status to error
     }
   };
 
   return (
     <>
       {/* Breadcrumb */}
-      <nav className="bg-yellow-400/90 text-sm text-gray-800 py-4 px-6 shadow-sm">
+      <nav className="bg-yellow-400/90 text-sm text-gray-900 py-4 px-6 shadow-sm">
         <div className="max-w-6xl mx-auto">
           <ol className="list-reset flex items-center space-x-2">
             <li>
@@ -143,45 +199,43 @@ export default function ContactPage() {
               </h2>
               <form onSubmit={handleSubmit} className="space-y-6 text-gray-900" noValidate>
                 {/* Name Field */}
-                <div className="relative flex items-center">
-                  <FaUser className="absolute left-3 text-gray-400 text-lg" />
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Your Name"
-                    value={form.name}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-lg py-3 pl-10 pr-4 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
-                    required
-                  />
-                </div>
+                <FormField
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Your Name"
+                  value={form.name}
+                  onChange={handleChange}
+                  icon={<FaUser />}
+                  required
+                  error={errors.name} // Pass the specific error for this field
+                />
 
                 {/* Email Field */}
-                <div className="relative flex items-center">
-                  <SiGmail className="absolute left-3 text-red-600 text-xl" />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Your Email"
-                    value={form.email}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-lg py-3 pl-10 pr-4 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
-                    required
-                  />
-                </div>
+                <FormField
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="Your Email"
+                  value={form.email}
+                  onChange={handleChange}
+                  icon={<SiGmail className="text-red-600" />} // Retained icon color for Gmail
+                  required
+                  error={errors.email}
+                />
 
                 {/* Message Field */}
-                <div className="relative">
-                  <FaCommentDots className="absolute left-3 top-3 text-gray-400" />
-                  <textarea
-                    name="message"
-                    placeholder="Your Message"
-                    value={form.message}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-lg py-3 pl-10 pr-4 h-32 resize-none placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
-                    required
-                  />
-                </div>
+                <FormField
+                  id="message"
+                  name="message"
+                  placeholder="Your Message"
+                  value={form.message}
+                  onChange={handleChange}
+                  icon={<FaCommentDots />}
+                  isTextArea // Indicate that this should be a textarea
+                  required
+                  error={errors.message}
+                />
 
                 {/* Submit Button */}
                 <button
@@ -194,8 +248,8 @@ export default function ContactPage() {
               </form>
 
               {/* Status Messages */}
-              {status === 'error' && (
-                <p className="mt-4 text-red-600 font-medium text-center">{errorMsg}</p>
+              {generalErrorMsg && ( // Display general errors (e.g., "Please correct errors" or API errors)
+                <p className="mt-4 text-red-600 font-medium text-center">{generalErrorMsg}</p>
               )}
               {status === 'success' && (
                 <p className="mt-4 text-green-600 font-medium text-center">

@@ -77,7 +77,7 @@ export default function GetInvolvedPage() {
             Contact us for details or to request a receipt.
           </p>
           <Link
-            href="/contact"
+            href="/get-involved/donate"
             className="inline-block text-sm font-medium bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition"
           >
             Donate Now →
