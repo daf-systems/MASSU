@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image'; // Added Image import for future best practice, though not directly used on img tags here yet.
 
 
 const testimonials = [
@@ -25,14 +26,23 @@ const testimonials = [
 
 export default function HorizontalTestimonialSpotlight() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout>();
+  // FIX IS HERE: Provide initial value and allow for null type
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    // Ensure intervalRef.current is assigned correctly
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % testimonials.length);
     }, 6000);
-    return () => clearInterval(intervalRef.current);
-  }, []);
+
+    // Cleanup function: Clear the interval when the component unmounts
+    // Make sure to check if intervalRef.current is not null before clearing
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []); // Empty dependency array means this effect runs once on mount
 
   const { name, quote } = testimonials[activeIndex];
 
@@ -51,6 +61,11 @@ export default function HorizontalTestimonialSpotlight() {
               }`}
               onClick={() => setActiveIndex(index)}
             >
+              {/* Note: For better performance and optimization in Next.js,
+                  consider using the <Image /> component from 'next/image' here as well,
+                  but it requires setting width and height props.
+                  Example: <Image src={testimonial.image} alt={testimonial.name} width={96} height={96} ... />
+              */}
               <img
                 src={testimonial.image}
                 alt={testimonial.name}
