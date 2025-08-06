@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 
-
 const testimonials = [
   {
     name: "Thoko Banda",
@@ -25,20 +24,23 @@ const testimonials = [
 
 export default function HorizontalTestimonialSpotlight() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout>();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null); // ✅ FIXED
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % testimonials.length);
     }, 6000);
-    return () => clearInterval(intervalRef.current);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current); // ✅ FIXED
+      }
+    };
   }, []);
 
   const { name, quote } = testimonials[activeIndex];
 
   return (
     <section className="flex flex-col items-center justify-center px-4 py-16 bg-gray-50 min-h-[350px]">
-
       {/* Image Row */}
       <div className="flex gap-8 mb-6 relative z-10">
         {testimonials.map((testimonial, index) => {
