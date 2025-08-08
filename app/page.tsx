@@ -19,33 +19,33 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section
-        className="relative bg-cover bg-center bg-no-repeat text-white py-24 px-8"
-        style={{ backgroundImage: "url('/images/abouts-staff.jpg')" }}
+ <section
+  className="bg-cover bg-center text-white py-24 px-8"
+  style={{ backgroundImage: "url('/images/abouts_staff.jpeg')" }}
+>
+  <div className="max-w-4xl mx-auto text-center bg-blue-900/60 p-10 rounded shadow-lg">
+    <h1 className="text-4xl md:text-6xl font-bold mb-4">Welcome to MASSU</h1>
+    <p className="text-lg md:text-2xl mb-6">
+      Empowering students across Malawi through mentorship, support, and education.
+    </p>
+    <div className="flex justify-center flex-wrap gap-4">
+      <Link
+        href="/get-involved"
+        className="bg-white text-blue-800 font-semibold px-6 py-3 rounded shadow hover:bg-gray-100 transition"
       >
-        <div className="max-w-5xl mx-auto">
-          <div className="bg-blue-900/80 backdrop-blur-sm rounded-xl p-10 text-center shadow-lg">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">Welcome to MASSU</h1>
-            <p className="text-lg md:text-2xl max-w-2xl mx-auto">
-              Empowering students across Malawi through mentorship, support, and education.
-            </p>
-            <div className="mt-8 flex justify-center flex-wrap gap-4">
-              <Link
-                href="/get-involved"
-                className="bg-white text-blue-800 font-semibold px-6 py-3 rounded shadow hover:bg-gray-100 transition"
-              >
-                Get Involved
-              </Link>
-              <Link
-                href="/programs"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded shadow transition"
-              >
-                Explore Our Programs
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+        Get Involved
+      </Link>
+      <Link
+        href="/programs"
+        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded shadow transition"
+      >
+        Explore Our Programs
+      </Link>
+    </div>
+  </div>
+</section>
+
+
 
       {/* What We Do Section */}
       <section className="py-16 px-8 max-w-6xl mx-auto text-center bg-gray-50 rounded-lg shadow-sm">

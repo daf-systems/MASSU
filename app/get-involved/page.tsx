@@ -32,7 +32,7 @@ export default function GetInvolvedPage() {
       <section
         aria-labelledby="get-involved-hero"
         className="bg-cover bg-center text-white py-24 px-8"
-        style={{ backgroundImage: "url('/images/abouts-staff.jpg')" }}
+        style={{ backgroundImage: "url('/images/abouts_staff.jpeg')" }}
       >
         <div className="max-w-4xl mx-auto text-center bg-blue-900/60 p-6 rounded shadow-lg">
           <h1

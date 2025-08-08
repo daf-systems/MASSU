@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import Image from 'next/image';
+
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -32,9 +34,17 @@ export default function Navbar() {
     <nav className="bg-blue-900 text-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Brand */}
-        <Link href="/" className="text-2xl font-bold tracking-tight hover:opacity-90 transition">
-          MASSU
-        </Link>
+       <Link href="/" className="flex items-center space-x-2 hover:opacity-90 transition">
+  <Image
+    src="/images/massu.jpeg"
+    alt="MASSU Logo"
+    width={40}
+    height={40}
+    className="rounded-full"
+  />
+  <span className="text-2xl font-bold tracking-tight">MASSU</span>
+</Link>
+
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex md:items-center space-x-6">

@@ -80,7 +80,7 @@ export default function ProgramsPage() {
       {/* Page Content */}
       <main
         className="relative min-h-screen bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/abouts-staff.jpg')" }}
+        style={{ backgroundImage: "url('/images/abouts_staff.jpeg')" }}
       >
         {/* Overlay for readability */}
         <div className="absolute inset-0 bg-blue-900/70"></div>
